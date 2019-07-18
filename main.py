@@ -3,7 +3,11 @@ import json
 from flask import Flask
 from flask import Response
 
+from utils import storage
+
+
 app = Flask(__name__)
+
 
 @app.route('/', methods=['GET'])
 def home():
@@ -13,7 +17,9 @@ def home():
 @app.route('/fetch/stock/symbols/', methods=['GET'])
 def fetch_stock_symbols():
     from crawlers.th_stock import fetch_symbols
-    return Response(json.dumps(fetch_symbols()), status=200)
+    stock_symbols = fetch_symbols()
+    storage.persist('th_stock/symbols', stock_symbols, key_for_id='symbol')
+    return Response(json.dumps(stock_symbols), status=200)
 
 
 if __name__ == '__main__':
