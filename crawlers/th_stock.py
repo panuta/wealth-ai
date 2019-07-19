@@ -1,5 +1,9 @@
 import requests
+
+from datetime import datetime, timedelta
 from lxml import etree
+
+from utils import date_utils, string_utils
 
 
 def fetch_symbols():
@@ -40,3 +44,38 @@ def fetch_symbols():
         })
 
     return symbols
+
+
+def fetch_nvdr(from_date, to_date=None):
+    if not to_date:
+        to_date = datetime.today()
+
+    todate = date_utils.strip_time(to_date)
+    fromdate = date_utils.strip_time(from_date)
+
+    crawl_date = fromdate
+    nvdr_data = []
+
+    while crawl_date <= todate:
+        request_url = 'https://www.set.or.th/set/nvdrbystock.do?format=excel&date={}'.format(
+            crawl_date.strftime('%d/%m/%Y'))
+        response = requests.get(request_url)
+
+        response_tree = etree.HTML(response.content)
+        tds = response_tree.xpath('//table[2]/tr[position()>2]/td')
+
+        for x in range(0, len(tds), 11):  # 11 => cells per row
+            row = tds[x:x + 11]
+            nvdr_data.append({
+                'symbol': row[0].text,
+                'date': crawl_date,
+                'buy_volume': string_utils.clean_num_string(row[1].text),  # Volume Buy
+                'sell_volume': string_utils.clean_num_string(row[2].text),  # Volume Sell
+                'buy_value': string_utils.clean_num_string(row[6].text),  # Value Buy
+                'sell_value': string_utils.clean_num_string(row[7].text),  # Value Sell
+                'percentage': string_utils.clean_num_string(row[5].text),  # Percentage
+            })
+
+        crawl_date = crawl_date + timedelta(days=1)
+
+    return nvdr_data
