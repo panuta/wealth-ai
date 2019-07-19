@@ -7,4 +7,4 @@ def strip_time(dt):
 
 def last_week_pair():
     today = strip_time(datetime.now())
-    return today - timedelta(days=-6), today
+    return today - timedelta(days=6), today - timedelta(days=1)

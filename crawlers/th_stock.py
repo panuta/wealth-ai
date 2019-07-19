@@ -50,13 +50,13 @@ def fetch_nvdr(from_date, to_date=None):
     if not to_date:
         to_date = datetime.today()
 
-    todate = date_utils.strip_time(to_date)
-    fromdate = date_utils.strip_time(from_date)
+    to_date = date_utils.strip_time(to_date)
+    from_date = date_utils.strip_time(from_date)
 
-    crawl_date = fromdate
+    crawl_date = from_date
     nvdr_data = []
 
-    while crawl_date <= todate:
+    while crawl_date <= to_date:
         request_url = 'https://www.set.or.th/set/nvdrbystock.do?format=excel&date={}'.format(
             crawl_date.strftime('%d/%m/%Y'))
         response = requests.get(request_url)
