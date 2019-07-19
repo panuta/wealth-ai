@@ -1,0 +1,7 @@
+#cron:
+#- description: "daily fetch stock symbols"
+#  url: /fetch/stock/symbols/
+#  schedule: every 24 hours
+#- description: "daily fetch stock nvdr"
+#  url: /fetch/stock/symbols/
+#  schedule: every 24 hours
