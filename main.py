@@ -18,7 +18,7 @@ def home():
 def fetch_stock_symbols():
     from crawlers.th_stock import fetch_symbols
     stock_symbols = fetch_symbols()
-    storage.persist('th_stock/symbols', stock_symbols, key_for_id='symbol')
+    storage.persist('th_stock_symbols', stock_symbols, key_for_id='symbol')
     return Response(json.dumps(stock_symbols), status=200)
 
 
