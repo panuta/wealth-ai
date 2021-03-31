@@ -1,6 +1,6 @@
 flask==1.1.1
 requests==2.22.0
-lxml==4.3.4
+lxml==4.6.3
 
 # Google services
 google-cloud-firestore==1.3.0
